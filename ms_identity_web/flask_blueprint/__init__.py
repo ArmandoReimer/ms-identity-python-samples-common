@@ -7,7 +7,14 @@ from flask import (
     request,
     )
 
+import os
+
+index = os.getenv('INDEX',default='/')
+
+# breakpoint()
 # TODO: redirect(url_for('index')) is too opinionated. user must be able to choose
+# index = 'https://127.0.0.1:5000/'
+
 
 class FlaskAADEndpoints(Blueprint):
     def __init__(self, id_web):
@@ -38,7 +45,8 @@ class FlaskAADEndpoints(Blueprint):
 
         @self.route(endpoints.redirect)
         def aad_redirect():
-            post_sign_in_url = id_web.id_data.post_sign_in_url or url_for('index')
+            # post_sign_in_url = id_web.id_data.post_sign_in_url or url_for(index)
+            post_sign_in_url = id_web.id_data.post_sign_in_url or index
             logger.debug(f"{name}{endpoints.redirect}: request received. will process params")
             logger.debug(f"{name}{endpoints.redirect}: will redirect to {post_sign_in_url} afterwards")
             return id_web.process_auth_redirect(redirect_uri=url_for('.aad_redirect',_external=True),
@@ -53,7 +61,10 @@ class FlaskAADEndpoints(Blueprint):
         def post_sign_out():
             logger.debug(f"{name}{endpoints.post_sign_out}: clearing session for username: {g.identity_context_data.username}")
             id_web.remove_user(g.identity_context_data.username)  # remove user auth from session on successful logout
-            return redirect(url_for('index'))                   # take us back to the home page
+            # return redirect(url_for(index))                   # take us back to the home page
+            return redirect(index)                   # take us back to the home page
+
         
     def url_for(self, destination, _external=False):
+        # breakpoint()
         return url_for(f'{self.name}.{destination}', _external=_external)
