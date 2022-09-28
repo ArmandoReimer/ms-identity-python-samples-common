@@ -71,4 +71,6 @@ class FlaskAADEndpoints(Blueprint):
         
     def url_for(self, destination, _external=False):
         # breakpoint()
-        return url_for(f'{self.name}.{destination}', _external=_external)
+        # return url_for(f'{self.name}.{destination}', _external=_external,) _scheme='https')
+        return url_for(f'{self.name}.{destination}', _external=True, _scheme='https')
+
