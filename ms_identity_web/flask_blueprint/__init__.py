@@ -9,7 +9,7 @@ from flask import (
 
 import os
 
-index = os.getenv('INDEX',default='/')
+index = os.getenv('INDEX')
 
 # breakpoint()
 # TODO: redirect(url_for('index')) is too opinionated. user must be able to choose
