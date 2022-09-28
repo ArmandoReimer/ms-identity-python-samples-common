@@ -27,7 +27,8 @@ class FlaskAADEndpoints(Blueprint):
 
         @self.route(endpoints.sign_in)
         def sign_in():
-            post_sign_in_url = request.values.get('post_sign_in_url', None)
+            # post_sign_in_url = request.values.get('post_sign_in_url', None)
+            post_sign_in_url = 'https://sam.app.ultimagen.com/sam/'
             logger.debug(f"{name}{endpoints.sign_in}: request received. will redirect browser to login")
             if post_sign_in_url:
                 id_web.id_data.post_sign_in_url = post_sign_in_url
