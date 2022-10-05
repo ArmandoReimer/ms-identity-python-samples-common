@@ -51,10 +51,10 @@ class FlaskAADEndpoints(Blueprint):
             # post_sign_in_url = index
             logger.debug(f"{name}{endpoints.redirect}: request received. will process params")
             logger.debug(f"{name}{endpoints.redirect}: will redirect to {post_sign_in_url} afterwards")
-            # return id_web.process_auth_redirect(redirect_uri=url_for('.aad_redirect',_external=True),
-            #                                     afterwards_go_to_url=post_sign_in_url)
-            return id_web.process_auth_redirect(redirect_uri=f'{index}/auth/redirect/',
+            return id_web.process_auth_redirect(redirect_uri=url_for('.aad_redirect',_external=True),
                                                 afterwards_go_to_url=post_sign_in_url)
+            # return id_web.process_auth_redirect(redirect_uri=f'{index}/auth/redirect/',
+            #                                     afterwards_go_to_url=post_sign_in_url)
 
         @self.route(endpoints.sign_out)
         def sign_out():
