@@ -28,7 +28,9 @@ class FlaskAADEndpoints(Blueprint):
         @self.route(endpoints.sign_in)
         def sign_in():
             # post_sign_in_url = request.values.get('post_sign_in_url', None)
-            post_sign_in_url = 'https://sam.app.ultimagen.com/sam/'
+            # post_sign_in_url = 'https://sam.app.ultimagen.com/sam/'
+            post_sign_in_url = index
+
             logger.debug(f"{name}{endpoints.sign_in}: request received. will redirect browser to login")
             if post_sign_in_url:
                 id_web.id_data.post_sign_in_url = post_sign_in_url
@@ -48,12 +50,16 @@ class FlaskAADEndpoints(Blueprint):
         def aad_redirect():
             # post_sign_in_url = id_web.id_data.post_sign_in_url or url_for(index)
             # post_sign_in_url = id_web.id_data.post_sign_in_url or index
-            post_sign_in_url = 'https://sam.app.ultimagen.com/sam/'
+            # post_sign_in_url = 'https://sam.app.ultimagen.com/sam/'
+            post_sign_in_url = index
+
             logger.debug(f"{name}{endpoints.redirect}: request received. will process params")
             logger.debug(f"{name}{endpoints.redirect}: will redirect to {post_sign_in_url} afterwards")
             # return id_web.process_auth_redirect(redirect_uri=url_for('.aad_redirect',_external=True),
             #                                     afterwards_go_to_url=post_sign_in_url)
-            return id_web.process_auth_redirect(redirect_uri='https://sam.app.ultimagen.com/sam/auth/redirect',
+            # return id_web.process_auth_redirect(redirect_uri='https://sam.app.ultimagen.com/sam/auth/redirect',
+            #                                     afterwards_go_to_url=post_sign_in_url)
+            return id_web.process_auth_redirect(redirect_uri=f'{index}auth/redirect',
                                                 afterwards_go_to_url=post_sign_in_url)
 
         @self.route(endpoints.sign_out)
