@@ -107,12 +107,19 @@ class IdentityWebPython(object):
             self._logger.info("process_auth_redirect: state matches. continuing.")
             self._parse_redirect_errors(req_params)
             self._logger.info("process_auth_redirect: no errors found in request params. continuing.")
+
+            self._logger.info(f"{redirect_uri=}")
             
             # get the response_type that was requested, and extract the payload:
             resp_type = response_type or self.aad_config.auth_request.response_type or str(ResponseType.CODE)
             payload = self._extract_auth_response_payload(req_params, resp_type)
             cache = self._adapter.identity_context_data.token_cache
             redirect_uri = redirect_uri or self.aad_config.auth_request.redirect_uri or None
+
+            self._logger.info(f"{redirect_uri=}")
+
+            self._logger.info(f"{self.aad_config.auth_request.redirect_uri=}")
+
 
             if resp_type == str(ResponseType.CODE): # code request is default for msal-python if there is no response type specified
                 # we should have a code. Now we must exchange the code for tokens.
