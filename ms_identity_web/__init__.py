@@ -188,6 +188,7 @@ class IdentityWebPython(object):
 
         result = client.acquire_token_silent_with_error(**silent_opts)
 
+        self._logger.info(f"acquired token silently! {result=}")
         self._process_result(result, token_cache)
 
     @require_context_adapter
