@@ -29,12 +29,14 @@ class FlaskAADEndpoints(Blueprint):
         def sign_in():
             # post_sign_in_url = request.values.get('post_sign_in_url', None)
             post_sign_in_url = index
-
+            logger.info(f"""{g.identity_context_data.username}""")
             logger.debug(f"{name}{endpoints.sign_in}: request received. will redirect browser to login")
             if post_sign_in_url:
                 id_web.id_data.post_sign_in_url = post_sign_in_url
                 logger.debug(f"{name}{endpoints.sign_in}: will redirect to {post_sign_in_url} afterwards")
             auth_url = id_web.get_auth_url(redirect_uri=url_for('.aad_redirect', _external=True))
+            logger.info(f"""{g.identity_context_data.username}""")
+
             return redirect(auth_url)
 
         @self.route(endpoints.edit_profile)
@@ -55,6 +57,7 @@ class FlaskAADEndpoints(Blueprint):
             logger.debug(f"{name}{endpoints.redirect}: will redirect to {post_sign_in_url} afterwards")
             # return id_web.process_auth_redirect(redirect_uri=url_for('.aad_redirect',_external=True),
             #                                     afterwards_go_to_url=post_sign_in_url)
+            logger.info(f"""{g.identity_context_data.username}""")
             return id_web.process_auth_redirect(redirect_uri=f'{index}auth/redirect',
                                                 afterwards_go_to_url=post_sign_in_url)
 
