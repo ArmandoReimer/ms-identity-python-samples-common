@@ -121,7 +121,7 @@ class FlaskContextAdapter(IdentityWebContextAdapter):
             identity_context_data = self._deserialize_identity_context_data_from_session()
             setattr(flask_g, IdentityContextData.SESSION_KEY, identity_context_data)
         
-        self.logger.info(f"""{flask_g.identity_context_data.username=}""")
+        # self.logger.info(f"""{flask_g.identity_context_data.username=}""")
                 
         return identity_context_data
 
