@@ -12,7 +12,8 @@ from .errors import *
 # TODO: 
 #  ##### IMPORTANT #####
 # features:
-# - do configurations work on multi-threaded flask environment? if not, attach them to current_app. configurations aren't stateful so this may be a moot point?
+# - do configurations work on multi-threaded flask environment? if not, attach them to current_app.
+#           configurations aren't stateful so this may be a moot point?
 # - edit profile interaction required error on edit profile if no token_cache or expired?
 # - password reset should use login hint/no interaction?
 # - decorator for filter by security groups
@@ -42,7 +43,7 @@ def require_context_adapter(f):
         
 class IdentityWebPython(object):
 
-    def __init__(self, aad_config: 'AADConfig', adapter: IdentityWebContextAdapter = None, logger: Logger = None) -> None:
+    def __init__(self, aad_config, adapter: IdentityWebContextAdapter|None = None, logger: Logger|None = None) -> None:
         self._logger = logger or Logger('IdentityWebPython')
         self._adapter = None
         self.aad_config = aad_config
@@ -65,7 +66,7 @@ class IdentityWebPython(object):
     def set_logger(self, logger: Logger) -> None:
         self._logger = logger
 
-    def _client_factory(self, token_cache: SerializableTokenCache = None, b2c_policy: str = None, **msal_client_kwargs) -> ConfidentialClientApplication:
+    def _client_factory(self, token_cache: SerializableTokenCache = None, b2c_policy: str|None = None, **msal_client_kwargs) -> ConfidentialClientApplication:
         client_config = self.aad_config.client.__dict__.copy() # need to make a copy since contents must be mutated
         client_config['authority'] = f'{self.aad_config.client.authority}{b2c_policy or ""}'
         if token_cache:
@@ -75,12 +76,12 @@ class IdentityWebPython(object):
         return ConfidentialClientApplication(**client_config)        
 
     @require_context_adapter
-    def get_auth_url(self, redirect_uri:str = None, b2c_policy: str = None, **msal_auth_url_kwargs):
+    def get_auth_url(self, redirect_uri:str|None = None, b2c_policy: str|None = None, **msal_auth_url_kwargs):
         """ Gets the auth URL that the user must be redirected to. Automatically
             configures B2C if app type is set to B2C."""
         auth_req_options = self.aad_config.auth_request.__dict__.copy()
         auth_req_options.update(**msal_auth_url_kwargs)
-        if redirect_uri:
+        if redirect_uri and auth_req_options['redirect_uri'] is None:
             auth_req_options['redirect_uri'] = redirect_uri
         self._generate_and_append_state_to_context_and_request(auth_req_options)
 
@@ -172,6 +173,10 @@ class IdentityWebPython(object):
                                                    self.aad_config.auth_request.scopes,
                                                    redirect_uri,
                                                    id_context.nonce)
+
+        self._logger.debug(f"{result['id_token']}")
+        self._logger.debug(f"{result['access_token']}")
+
         return result
 
     @require_context_adapter
