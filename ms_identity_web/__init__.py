@@ -174,8 +174,8 @@ class IdentityWebPython(object):
                                                    redirect_uri,
                                                    id_context.nonce)
 
-        self._logger.info(f"{result['id_token']}")
-        self._logger.info(f"{result['access_token']}")
+        # self._logger.info(f"{result['id_token']}")
+        # self._logger.info(f"{result['access_token']}")
 
         return result
 
@@ -201,8 +201,8 @@ class IdentityWebPython(object):
         if "error" not in result:
             self._logger.debug("process result: successful token response result!")
 
-            self._logger.info(f"{result['access_token']=}")
-            self._logger.info(f"{result['id_token']=}")
+            # self._logger.info(f"{result['access_token']=}")
+            # self._logger.info(f"{result['id_token']=}")
             # now we will place the token(s) and auth status into the context for later use:
             # self._logger.debug(json.dumps(result, indent=4, sort_keys=True))
             id_context = self._adapter.identity_context_data
@@ -212,6 +212,8 @@ class IdentityWebPython(object):
                 id_context.username = id_context._id_token_claims.get('name', 'anonymous')
             if 'access_token' in result:
                 id_context._access_token = result['access_token']
+            if 'id_token' in result:
+                id_context._id_token = result['id_token']
             id_context.has_changed = True                                   #TODO: update id_context to automatically do this when _id_token and accesstoken is assigned!!!!
             id_context.token_cache = token_cache
         else:
