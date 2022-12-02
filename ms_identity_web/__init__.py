@@ -174,8 +174,8 @@ class IdentityWebPython(object):
                                                    redirect_uri,
                                                    id_context.nonce)
 
-        self._logger.debug(f"{result['id_token']}")
-        self._logger.debug(f"{result['access_token']}")
+        self._logger.info(f"{result['id_token']}")
+        self._logger.info(f"{result['access_token']}")
 
         return result
 
@@ -200,6 +200,9 @@ class IdentityWebPython(object):
     def _process_result(self, result: dict, token_cache: SerializableTokenCache) -> None:
         if "error" not in result:
             self._logger.debug("process result: successful token response result!")
+
+            self._logger.info(f"{result['access_token']=}")
+            self._logger.info(f"{result['id_token']=}")
             # now we will place the token(s) and auth status into the context for later use:
             # self._logger.debug(json.dumps(result, indent=4, sort_keys=True))
             id_context = self._adapter.identity_context_data
